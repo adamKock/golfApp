@@ -1,0 +1,11 @@
+Notes 
+
+Need Pojo class 
+
+Need to create the different layers 
+service
+repo
+web layer (Controller)
+create interface of service layer
+
+Application properties file for local host etc 
