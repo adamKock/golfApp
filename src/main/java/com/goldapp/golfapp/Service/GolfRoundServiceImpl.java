@@ -1,5 +1,6 @@
 package com.goldapp.golfapp.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class GolfRoundServiceImpl implements GolfRoundService {
     @Override
     public List<GolfRound> getGolfRounds() {
         return repo.getGolfRounds();
+    }
+
+    @Override
+    public GolfRound findRoundByDateAndCourse(LocalDate date, String course){
+        return repo.findRoundByDateAndCourse(date, course);
     }
 
     

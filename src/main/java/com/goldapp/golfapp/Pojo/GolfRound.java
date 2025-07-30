@@ -1,33 +1,44 @@
 package com.goldapp.golfapp.Pojo;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public class GolfRound {
 
-    private int score;
-    private String course; 
+    private String courseName; 
+    private LocalDate date; 
+    private List<Hole> holes;
+    private String weatherConditions; 
 
-    // No-arg constructor required by Jackson
-    public GolfRound() {
+    // getters and setters
+
+    public String getCourseName() {
+        return courseName;
+    }
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
-    public GolfRound(int score){
-        this.score = score;
+    public LocalDate getDate() {
+        return date;
+    }
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public int getScore(){
-        return score;
+    public List<Hole> getHoles() {
+        return holes;
+    }
+    public void setHoles(List<Hole> holes) {
+        this.holes = holes;
     }
 
-    public void setScore(int score){
-        this.score = score;
+    public String getWeatherConditions(){
+        return weatherConditions; 
     }
 
-
-    public String getCourse(){
-        return course;
+    public void setWeatherConditions(String weatherConditions){
+        this.weatherConditions = weatherConditions; 
     }
-
-    public void setCourse(String course){
-        this.course = course;
-    }
-
+    
 }

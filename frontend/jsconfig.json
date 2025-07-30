@@ -4,5 +4,12 @@
       "@/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/components/TheWelcome.vue",
+    "src/views/AboutView.vue",
+    "src/components/AddRound.vue",
+    "src/components/ViewStats.vue"
+  ]
 }

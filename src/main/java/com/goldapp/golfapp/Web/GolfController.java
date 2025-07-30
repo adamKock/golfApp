@@ -1,6 +1,9 @@
 package com.goldapp.golfapp.Web;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,14 +26,13 @@ public class GolfController {
 
 
     @PostMapping("/round/create")
-    public ResponseEntity<HttpStatus> createPost(@RequestBody GolfRound round){
-        if(round.getScore()<0){
-            throw new IllegalArgumentException("Score cannot be negative");
-        }
+    public ResponseEntity<Map<String, String>> createPost(@RequestBody GolfRound round){
         golfRoundService.addRound(round);
-        return new ResponseEntity<>(HttpStatus.OK); 
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Round saved successfully");
+        return ResponseEntity.ok(response);
+}
 
-    }
 
     @GetMapping("/hello")
     public String hello() {
@@ -44,6 +46,11 @@ public class GolfController {
         }
         return golfRoundService.getGolfRounds();
     }
+
+    @PostMapping("/round/find")
+    public GolfRound findRound(@RequestBody GolfRound round) {
+        return golfRoundService.findRoundByDateAndCourse(round.getDate(), round.getCourseName());
+}
     
 	
 }
