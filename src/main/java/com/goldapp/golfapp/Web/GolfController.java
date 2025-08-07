@@ -12,45 +12,57 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.goldapp.golfapp.Pojo.GolfRound;
 import com.goldapp.golfapp.Service.GolfRoundService;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", 
+             allowedHeaders = "*",
+             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+             allowCredentials = "true") // Add this
 @RestController
+@RequestMapping("/round")
 public class GolfController {
 
-    @Autowired private GolfRoundService golfRoundService; 
+    @Autowired
+    private GolfRoundService golfRoundService;
 
-
-
-    @PostMapping("/round/create")
-    public ResponseEntity<Map<String, String>> createPost(@RequestBody GolfRound round){
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, String>> createPost(@RequestBody GolfRound round) {
         golfRoundService.addRound(round);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Round saved successfully");
         return ResponseEntity.ok(response);
-}
-
+    }
 
     @GetMapping("/hello")
     public String hello() {
         return "Hello from Golf App!";
     }
 
-    @GetMapping("/round/get")
+    @GetMapping("/get")
     public List<GolfRound> getMethodName() {
-        if(golfRoundService.getGolfRounds().size()<1){
+        if (golfRoundService.getGolfRounds().size() < 1) {
             throw new IllegalArgumentException("No rounds saved");
         }
         return golfRoundService.getGolfRounds();
     }
 
-    @PostMapping("/round/find")
+    @PostMapping("/find")
     public GolfRound findRound(@RequestBody GolfRound round) {
-        return golfRoundService.findRoundByDateAndCourse(round.getDate(), round.getCourseName());
-}
-    
-	
+        return golfRoundService.findRoundByDateAndCourseName(round.getDate(), round.getCourseName());
+    }
+
+    @GetMapping("/allRounds")
+    public List<GolfRound> getAllGolfRounds() {
+        if (golfRoundService.getGolfRounds().size() < 1) {
+            throw new IllegalArgumentException("No rounds saved");
+        }
+        return golfRoundService.getGolfRounds();
+    }
+
+
 }

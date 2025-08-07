@@ -14,7 +14,6 @@
     <div class="home-container">
       <header class="hero">
         <h1>Adam's Golf Stats Tracker - View Round</h1>
-        <p>Enter your score </p>
       </header>
     </div>
 
@@ -53,6 +52,11 @@
   <div class="chart-wrapper">
     <h3>Fairway Accuracy</h3>
     <ChartComponent :chartData="fairwayAccuracy" :chartOptions="options" chartType="pie" />
+  </div>
+
+    <div class="chart-wrapper">
+    <h3>Green In Regulation Accuracy</h3>
+    <ChartComponent :chartData="girComputed" :chartOptions="options" chartType="pie" />
   </div>
 
   <div class="chart-wrapper">
@@ -233,12 +237,16 @@ const fairwayAttempted = computed(() => {
       return fairwayAttempted.value > 0 ? Math.round((fairwaysHit.value / fairwayAttempted.value) * 100) : 0;
     });
 
-    const greensInRegulation = computed(() => {
+    const greensInRegulationHit = computed(() => {
       return roundData.value ? roundData.value.holes.filter(h => h.gir === true).length : 0;
     });
 
+      const greensInRegulationMissed = computed(() => {
+      return roundData.value ? roundData.value.holes.filter(h => h.gir === false).length : 0;
+    });
+
     const greensInRegulationPercentage = computed(() => {
-      return roundData.value ? Math.round((greensInRegulation.value / roundData.value.holes.length) * 100) : 0;
+      return roundData.value ? Math.round((greensInRegulationHit.value / roundData.value.holes.length) * 100) : 0;
     });
 
 const puttsData = computed(() => {
@@ -311,6 +319,31 @@ const scoreVsPar = computed(() => {
   };
 });
 
+const girComputed = computed(() => {
+  if (!roundData.value) {
+    return {
+      labels: ['Hit', 'Missed'],
+      datasets: [{
+        label: 'Green In Reg Hit vs Missed',
+        backgroundColor: ['#4caf50', '#ff9800', ],
+        data: [0, 0, ],
+      }],
+    };
+  }
+
+
+  return {
+     labels: ['Hit', 'Missed'],
+    datasets: [
+      {
+       label: 'Green In Reg Hit vs Missed',
+        backgroundColor: ['#4caf50', '#ff9800'],
+        data: [greensInRegulationHit.value, greensInRegulationMissed.value],
+      },
+    ],
+  };
+});
+
 
 
 
@@ -338,7 +371,8 @@ const options = {
       threePlusPutts,
       fairwaysHit,
       fairwayPercentage,
-      greensInRegulation,
+      greensInRegulationHit,
+      greensInRegulationMissed,
       greensInRegulationPercentage,
       options,
       puttsData,
@@ -350,7 +384,7 @@ const options = {
       scoreVsPar,
       formattedDate,
       weatherConditions,
-
+      girComputed,
     
     };
   },
@@ -448,16 +482,23 @@ input:focus {
 
 .charts-row {
   display: flex;
-  justify-content: space-around; /* or space-between */
-  gap: 2rem; /* spacing between charts */
-  flex-wrap: wrap; /* wrap on smaller screens */
+  justify-content: space-between; /* Distribute space evenly */
+  gap: 1rem; /* Reduced gap between charts */
+  flex-wrap: nowrap; /* Prevent wrapping */
   margin-top: 2rem;
+  overflow-x: auto; /* Allow horizontal scrolling if needed */
+  padding-bottom: 1rem; /* Space for scrollbar */
 }
 
 .chart-wrapper {
-  flex: 1 1 700px; /* grow, shrink, base width */
-  max-width: 400px; /* optional max width */
+  flex: 1; /* Each chart takes equal space */
+  min-width: 22%; /* Minimum width for each chart */
+  max-width: 24%; /* Maximum width for each chart */
   text-align: center;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 .hole-data-table {
   margin: 2rem auto;
@@ -488,6 +529,10 @@ input:focus {
 
 .hole-data-table tr:nth-child(even) {
   background-color: #f9f9f9;
+}
+.round-summary{
+  text-align: left;
+  padding: 1rem;
 }
 
 

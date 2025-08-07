@@ -31,6 +31,8 @@
     </div>
     <form @submit.prevent="submitHole">
 
+  <p class="hole-title-text">Golf Day Course Inputs </p>
+
  <div class="form-group">
       <label for="coursename">Course Name</label>
       <input type="text" v-model="courseName" id="coursename" placeholder="Course Name" required />
@@ -39,7 +41,7 @@
       <input type="date" v-model="date" id="date"> 
 
       
-      <h3 class="section-title">Weather Conditions</h3>
+      <h4 class="section-title">Weather Conditions</h4>
       <div class="radio-group-par">
 
       <label for="good">Good </label>
@@ -60,9 +62,8 @@
       <input type="radio" id="18Holes" value="18" v-model="holesToPlay" name="holes">
       </div>
 
-      <div class="hole-title">
-        <p>Hole By Hole Data </p>
-      </div>
+      <p class="hole-title-text">Hole By Hole Data</p>
+
 
      
 
@@ -72,7 +73,7 @@
 
       <h3 class="section-title">Par for hole</h3>
       <div class="radio-group-par">
-
+      
       <label for="par3">Par 3 </label>
       <input type="radio" id="par3" value="3" v-model.number="currentHole.par" name="par">
 
@@ -223,101 +224,97 @@ export default {
     };
   },
   methods: {
-    submitHole() {
-        if (this.roundData.length >= parseInt(this.holesToPlay)) {
-      alert(`You’ve already entered ${this.holesToPlay} holes. The round is complete.`);
-      return;
-  }
-       // Validate all required fields
-    if (
-      this.currentHole.holeNumber ==null ||
-      this.currentHole.par ==null ||
-      this.currentHole.strokes ==null ||
-      this.currentHole.putts  ==null ||
-      this.currentHole.penalties ==null ||
-      this.currentHole.teeClubUsed ==null
-  ) {
-    alert("Please complete all fields before submitting.");
-    return;
-  }
+    async submitHole() {
+    if (this.roundData.length >= parseInt(this.holesToPlay)) {
+        alert(`You've already entered ${this.holesToPlay} holes. The round is complete.`);
+        return;
+    }
 
-   // Set isGIR explicitly before pushing
-  this.currentHole.isGIR = this.isGIR;
+    // Validate all required fields
+    if (!this.currentHole.par || !this.currentHole.strokes || !this.currentHole.putts || 
+        !this.currentHole.penalties || !this.currentHole.teeClubUsed) {
+        alert("Please complete all fields before submitting.");
+        return;
+    }
 
- 
-      // Push current hole to roundData
-      this.roundData.push({ ...this.currentHole });
+    // Set isGIR explicitly before pushing
+    this.currentHole.isGIR = this.isGIR;
 
-      // Reset hole fields
-      this.currentHole = {
+    // Push current hole to roundData
+    this.roundData.push({ ...this.currentHole });
+
+    // Reset hole fields
+    this.currentHole = {
         holeNumber: this.roundData.length + 1,
         par: null,
         strokes: null,
         fairway: null,
         putts: null,
-        penalties:null,
-        teeClubUsed:null,
-        upAndDown:'n/a',
-        isGIR:null,
-      };
+        penalties: null,
+        teeClubUsed: null,
+        upAndDown: 'n/a',
+        isGIR: null,
+    };
 
-      // Check if round is complete
-      if (this.roundData.length === parseInt(this.holesToPlay)) {
-        // Submit all data to backend
+    // Check if round is complete
+    if (this.roundData.length === parseInt(this.holesToPlay)) {
         const round = {
-          courseName: this.courseName,
-          weatherConditions: this.weatherConditions,
-          date: this.date,
-          holes: this.roundData
+            courseName: this.courseName,
+            weatherConditions: this.weatherConditions,
+            date: this.date,
+            holes: this.roundData
         };
 
-       fetch('http://localhost:8080/round/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(round)
-    })
-   .then(data => {
-  console.log('Success:', data);
-  alert('Round complete and submitted!');
+        try {
+            const response = await fetch('http://localhost:8080/round/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(round),
+                credentials: 'include' // Important for cookies/sessions if using them
+            });
 
-  // Reset everything
-  this.courseName = '';
-  this.weatherConditions = '';
-  this.date = '';
-  this.holesToPlay = null;
-  this.roundData = [];
-  this.currentHole = {
-    holeNumber: null,
-    par: null,
-    strokes: null,
-    fairway: null,
-    putts: null,
-    penalties:null,
-    isGIR:null,
-    teeClubUsed:'',
-    upAndDown:null,
-  };
-})
-    .then(data => {
-      console.log('Success:', data);
-      alert('Round complete and submitted!');
-      this.roundData = [];
-    })
-    .catch(error => {
-      console.error('Error submitting round:', error);
-      alert('There was an error submitting your round.');
-    });
-  } 
-    },
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log('Success:', data);
+            alert('Round complete and submitted!');
+
+            // Reset everything
+            this.courseName = '';
+            this.weatherConditions = '';
+            this.date = '';
+            this.holesToPlay = null;
+            this.roundData = [];
+            this.currentHole = {
+                holeNumber: null,
+                par: null,
+                strokes: null,
+                fairway: null,
+                putts: null,
+                penalties: null,
+                isGIR: null,
+                teeClubUsed: '',
+                upAndDown: null,
+            };
+        } catch (error) {
+            console.error('Error submitting round:', error);
+            alert('There was an error submitting your round.');
+        }
+    }
+},
     
     undoLastHole() {
   if (this.roundData.length > 0) {
     const lastHole = this.roundData.pop();
     this.currentHole = { ...lastHole }; // Refill the form with the last hole data
   }
-}
+},
+
+ 
   },
   
   watch: {
@@ -397,12 +394,13 @@ computed: {
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
-.hole-title {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  color: #555;
+.hole-title-text {
+  font-weight: bold;
+  font-size: 1.1rem;
   text-align: center;
-  
+  text-decoration: underline #e74c3c;
+
+
 }
 
 .hero p {

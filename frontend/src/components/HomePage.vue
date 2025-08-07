@@ -14,9 +14,14 @@
       <header class="hero">
         <h1>Adam's Golf Stats Tracker - Home  </h1>
         <p>Track your golf rounds, stats, and performance — one hole at a time.</p>
+        <img src ="/images/Miramar15th.jpg" class="img-navBar"></img>
       </header>
       <ChartComponent/>
     </div>
+
+    <body class="img-home">
+      
+    </body>
   </div>
 </template>
 
@@ -63,7 +68,7 @@ export default {
 
 /* Content stays centered */
 .home-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 3rem auto;
   padding: 2rem;
   text-align: center;
@@ -86,6 +91,12 @@ h1 {
   text-align: center; /* Optional: centers the text */
   padding: 20px; /* Optional: adds spacing */
   margin: 0; /* Optional: removes default margin */
+}
+.img-navBar{
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
 }
 
 </style>

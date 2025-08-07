@@ -9,6 +9,6 @@ public interface GolfRoundService {
 
     void addRound(GolfRound golfRound);
     public List<GolfRound> getGolfRounds();
-    public GolfRound findRoundByDateAndCourse(LocalDate date, String course);
+    public GolfRound findRoundByDateAndCourseName(LocalDate date, String courseName);
     
 } 

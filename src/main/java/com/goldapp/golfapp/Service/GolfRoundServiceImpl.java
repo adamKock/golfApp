@@ -16,17 +16,17 @@ public class GolfRoundServiceImpl implements GolfRoundService {
 
     @Override
     public void addRound(GolfRound golfRound) {
-        repo.addRound(golfRound);
+        repo.save(golfRound);
     }
 
     @Override
     public List<GolfRound> getGolfRounds() {
-        return repo.getGolfRounds();
+        return repo.findAll();
     }
 
     @Override
-    public GolfRound findRoundByDateAndCourse(LocalDate date, String course){
-        return repo.findRoundByDateAndCourse(date, course);
+    public GolfRound findRoundByDateAndCourseName(LocalDate date, String courseName){
+        return repo.findRoundByDateAndCourseName(date, courseName);
     }
 
     
