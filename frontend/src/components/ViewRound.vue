@@ -41,6 +41,9 @@
   <p><strong>3+ Putts:</strong> {{ threePlusPutts }}</p>
   <p><strong>Fairways Hit:</strong> {{ fairwaysHit }} ({{ fairwayPercentage }}%)</p>
   <p><strong>Total Fairways:</strong> {{ fairwayAttempted }}</p>
+  <p><strong>Green In Regulation :</strong> ({{ greensInRegulationPercentage }}%)</p>
+
+
 </div>
 
 <div v-if="roundData" class="charts-row">

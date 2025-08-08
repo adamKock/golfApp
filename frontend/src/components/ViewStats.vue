@@ -94,10 +94,16 @@
               <div>
                 <p><strong>Weather:</strong> {{ round.weatherConditions }}</p>
                 <p><strong>Total Putts:</strong> {{ calculateTotalPutts(round.holes) }}</p>
+                <p><strong>Total Penalties:</strong> {{ calculatePenalties(round.holes) }}</p>
+             
+
+
               </div>
               <div>
                 <p><strong>Fairways:</strong> {{ calculateFairwaysHit(round.holes) }}/{{ calculateFairwaysAttempted(round.holes) }} ({{ calculateFairwayPercentage(round.holes) }}%)</p>
-                <p><strong>GIR:</strong> {{ calculateGIR(round.holes) }}/18 ({{ calculateGIRPercentage(round.holes) }}%)</p>
+                <p><strong>GIR:</strong> {{ calculateGIR(round.holes) }}/{{ getRoundHoleCount(round.holes) }} {{(calculateGIRPercentage(round.holes))}}%</p>
+                <p><strong>Up and Downs Per Round:</strong> {{ calculateUpAndDownsPerRound(round.holes) }}</p>
+
               </div>
             </div>
           </div>
@@ -125,6 +131,14 @@
               <BarChartComponent 
                 :chartData="getScoreVsParData(round.holes)" 
                 :chartOptions="barChartOptions" 
+              />
+            </div>
+             <div class="chart-wrapper">
+              <h4>Green In Regulation Hit</h4>
+              <ChartComponent 
+                :chartData="getGIRData(round.holes)" 
+                :chartOptions="pieChartOptions" 
+                chartType="pie"
               />
             </div>
           </div>
@@ -198,6 +212,7 @@ import { ref, computed, onMounted } from 'vue';
 import ChartComponent from './PieChartComponent.vue';
 import BarChartComponent from './BarChartComponent.vue';
 import LineChartComponent from './LineChartComponent.vue';
+import PieChartComponent from './PieChartComponent.vue';
 
 export default {
   components: {
@@ -438,6 +453,31 @@ const GIRAccuracyOverTimeData = computed(() => {
     function calculateGIRPercentage(holes) {
       return Math.round((calculateGIR(holes) / holes.length) * 100);
     }
+
+  function getRoundHoleCount(holes) {
+  return holes.length; // Returns 9 or 18
+}
+
+function calculateUpAndDownsPerRound(holes){
+  return holes.filter(u=> u.upAndDown==="yes").length;
+}
+
+function calculatePenalties(holes){
+  return holes.filter(p=> p.penalties==="1").length;
+}
+
+    function getGIRData(holes){
+      const girHit = calculateGIR(holes); 
+      const girMissed = holes.length-girHit; 
+
+      return {
+        labels: ['GIR Hit', 'GIR Missed'],
+        datasets: [{
+          backgroundColor: ['#4caf50', '#f44336'],
+          data: [girHit, girMissed],
+    }],
+  };
+    }
     
     function getPuttsData(holes) {
       const onePutts = holes.filter(h => h.putts === 1).length;
@@ -478,6 +518,7 @@ const GIRAccuracyOverTimeData = computed(() => {
           data: [totalPar, totalStrokes],
         }],
       };
+      
     }
 
     // Load data when component mounts
@@ -518,6 +559,10 @@ const GIRAccuracyOverTimeData = computed(() => {
       getScoreVsParData,
       fairwayAccuracyOverTimeData,
       GIRAccuracyOverTimeData,
+      getGIRData,
+      getRoundHoleCount,
+      calculateUpAndDownsPerRound,
+      calculatePenalties,
     };
   }
 };
