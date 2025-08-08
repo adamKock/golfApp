@@ -16,7 +16,7 @@
 
       <!-- Overall Statistics -->
       <div v-if="filteredRounds.length > 0" class="summary-section">
-        <h2>Overall Statistics</h2>
+        <h2>Overall Statistics Comparison Against 3 - Handicap</h2>
         <div class="stats-grid">
           <!-- Score section-->
 
