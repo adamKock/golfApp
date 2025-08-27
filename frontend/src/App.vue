@@ -8,8 +8,7 @@
 import AddRound from './components/AddRound.vue'
 import HomePage from './components/HomePage.vue'
 import ChartComponent from './components/PieChartComponent.vue';
-import ChartComponent from './components/BarChartComponent.vue';
-import ChartComponent from './components/LineChartComponent.vue';
+import LoginPage from './components/LoginPage.vue';
 
 
 
@@ -19,6 +18,7 @@ export default {
     AddRound,
     HomePage,
     ChartComponent,
+    LoginPage,
   },
 }
 </script>

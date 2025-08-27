@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <nav class="nav-bar">
-      <router-link to="/" class="nav-link">Home</router-link>
+         <router-link to="/" class="nav-link">Logout</router-link>
+     <router-link to="/home" class="nav-link">Home</router-link>
       <router-link to="/AddRound" class="nav-link">Add Round</router-link>
       <router-link to="/ViewRound" class="nav-link">View Round</router-link>
       <router-link to="/ViewStats" class="nav-link">View Stats</router-link>
@@ -55,7 +56,7 @@
           </div>
 
           <div class="stat-card">
-            <div :class="{ 'green-box': averagePuttsFor18 <= 30, 'red-box': averagePuttsFor18 >30  }">
+            <div :class="{ 'green-box': averagePuttsFor18 <30, 'red-box': averagePuttsFor18 >30, 'grey-box' : averagePuttsFor18 <5 }">
             <h3>Average Putts per round 18 holes</h3>
             <p>{{ averagePuttsFor18 }}</p>
             </div>
@@ -63,14 +64,14 @@
 
 
             <div class="stat-card">
-            <div :class="{ 'green-box': averagePuttsPerParThree <= 1.85, 'red-box': averagePuttsFor18 >1.86  }">
+            <div :class="{ 'green-box': averagePuttsPerParThree <= 1.85, 'orange-box' : averagePuttsPerParThree >1.86, 'red-box': averagePuttsPerParThree >2  }">
             <h3>Average Putts Per Par 3</h3>
             <p>{{averagePuttsPerParThree  }}</p>
             </div>
           </div>
 
            <div class="stat-card">
-            <div :class="{ 'green-box': averagePuttsPerParFour <= 1.72, 'red-box': averagePuttsPerParFour >1.73  }">
+            <div :class="{ 'green-box': averagePuttsPerParFour <= 1.72,'orange-box' : averagePuttsPerParFour >=1.73, 'red-box': averagePuttsPerParFour >=2  }">
             <h3>Average Putts Per Par 4</h3>
             <p>{{ averagePuttsPerParFour  }}</p>
              </div>
@@ -78,7 +79,7 @@
 
 
            <div class="stat-card">
-            <div :class="{ 'green-box': averagePuttsPerParFive <= 1.60, 'red-box': averagePuttsPerParFive >1.61  }">
+            <div :class="{ 'green-box': averagePuttsPerParFive <= 1.60,'orange-box' : averagePuttsPerParFive >=1.61, 'red-box': averagePuttsPerParFive >1.9  }">
             <h3>Average Putts Per Par 5</h3>
             <p>{{ averagePuttsPerParFive }}</p>
           </div>
@@ -99,7 +100,7 @@
           </div>
 
             <div class="stat-card">
-              <div :class="{ 'green-box': puttsPerGIR <= 1.85, 'red-box': puttsPerGIR >1.85  }">
+              <div :class="{ 'green-box': puttsPerGIR <= 1.7, 'orange-box' : puttsPerGIR >1.71, 'red-box': puttsPerGIR >1.9  }">
             <h3> Putts Per GIR  </h3>
             <p>{{ puttsPerGIR }}</p>
           </div>
@@ -317,53 +318,106 @@ export default {
       return (total / filteredRounds.value.length).toFixed(1);
     });
 
-    const averageScoreOnParThree = computed(() => {
+  
+      const averageScoreOnParThree = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAverageScoreForPar3(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
+
+      let totalPar3Strokes =0; 
+      let totalPar3Holes =0; 
+      
+     filteredRounds.value.forEach(round => {
+    const par3Holes = round.holes.filter(hole => hole.par === "3" || hole.par === 3);
+     totalPar3Strokes += par3Holes.reduce((sum, hole) => sum + Number(hole.strokes), 0);
+    totalPar3Holes += par3Holes.length;
+  });
+  
+  return totalPar3Holes > 0 ? (totalPar3Strokes / totalPar3Holes).toFixed(1) : 0;
+
     });
 
       const averageScoreOnParFour = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAverageScoreForPar4(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
+
+      let totalPar4Strokes =0; 
+      let totalPar4Holes =0; 
+      
+     filteredRounds.value.forEach(round => {
+     const par4Holes = round.holes.filter(hole => hole.par === "4" || hole.par === 4);
+    totalPar4Strokes += par4Holes.reduce((sum, hole) => sum + Number(hole.strokes), 0);
+    totalPar4Holes += par4Holes.length;
+  });
+  
+  return totalPar4Holes > 0 ? (totalPar4Strokes / totalPar4Holes).toFixed(1) : 0;
+
     });
 
-      const averageScoreOnParFive = computed(() => {
+       const averageScoreOnParFive = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAverageScoreForPar5(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
+
+      let totalPar5Strokes =0; 
+      let totalPar5Holes =0; 
+      
+     filteredRounds.value.forEach(round => {
+     const par5Holes = round.holes.filter(hole => hole.par === "5" || hole.par === 5);
+    totalPar5Strokes += par5Holes.reduce((sum, hole) => sum + Number(hole.strokes), 0);
+    totalPar5Holes += par5Holes.length;
+  });
+  
+  return totalPar5Holes > 0 ? (totalPar5Strokes / totalPar5Holes).toFixed(1) : 0;
+
     });
+
 
       const averagePuttsPerParThree = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAveragePuttsPar3(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
-    });
 
-      const averagePuttsPerParFour = computed(() => {
+      let totalPuttsPar3 =0; 
+      let totalPar3Holes =0; 
+
+        filteredRounds.value.forEach(round => {
+          const par3Holes = round.holes.filter(hole => hole.par ==="3" || hole.par ===3);
+          totalPuttsPar3 += par3Holes.reduce((sum, hole) => sum + Number (hole.putts),0);
+          totalPar3Holes+= par3Holes.length; 
+        }); 
+
+        return totalPar3Holes >0 ? (totalPuttsPar3 / totalPar3Holes).toFixed(1):0; 
+    
+      });
+    
+      const averagePuttsPerParFour= computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAveragePuttsPar4(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
-    });
 
+      let totalPuttsPar4 =0; 
+      let totalPar4Holes =0; 
+
+        filteredRounds.value.forEach(round => {
+          const par4Holes = round.holes.filter(hole => hole.par ==="4" || hole.par ===4);
+          totalPuttsPar4 += par4Holes.reduce((sum, hole) => sum + Number (hole.putts),0);
+          totalPar4Holes+= par4Holes.length; 
+        }); 
+
+        return totalPar4Holes >0 ? (totalPuttsPar4 / totalPar4Holes).toFixed(1):0; 
+    
+      });
+
+
+     
       const averagePuttsPerParFive = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAveragePuttsPar5(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
-    });
+
+      let totalPuttsPar5 =0; 
+      let totalPar5Holes =0; 
+
+        filteredRounds.value.forEach(round => {
+          const par5Holes = round.holes.filter(hole => hole.par ==="5" || hole.par ===5);
+          totalPuttsPar5 += par5Holes.reduce((sum, hole) => sum + Number (hole.putts),0);
+          totalPar5Holes+= par5Holes.length; 
+        }); 
+
+        return totalPar5Holes >0 ? (totalPuttsPar5 / totalPar5Holes).toFixed(1):0; 
+    
+      });
+
 
    const threePuttFrequency = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
@@ -383,10 +437,18 @@ export default {
 
      const puttsPerGIR = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculatePuttsPerGIR(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
+
+      let totalPutts =0; 
+      let totalGirHoles =0; 
+
+      filteredRounds.value.forEach(round => {
+        const girHoles = round.holes.filter(hole => hole.gir ===true); 
+        totalPutts += girHoles.reduce((sum, hole) => sum+ Number (hole.putts),0);
+        totalGirHoles += girHoles.length; 
+      });
+
+        return totalGirHoles >0 ? (totalPutts / totalGirHoles).toFixed(1):0; 
+  
     });
 
    const averagePuttsFor9 = computed(() => {
@@ -564,27 +626,54 @@ const GIRAccuracyOverTimeData = computed(() => {
 
  const averageParFromLeftRough = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAverageParFromLeftRough(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
+
+      let parMade =0; 
+      let timesHitLeftRough =0; 
+
+      filteredRounds.value.forEach(round =>{
+        const leftRoughHoles= round.holes.filter(hole => hole.fairway ==="Left");
+        timesHitLeftRough += leftRoughHoles.length; 
+
+        parMade += leftRoughHoles.filter(hole => hole.strokes <= hole.par).length; 
+      })
+     
+      return timesHitLeftRough >0 ? ((parMade / timesHitLeftRough)*100).toFixed(1):0;
+    
     });
 
-     const averageParFromRightRough = computed(() => {
+    const averageParFromRightRough = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAverageParFromRightRough(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
+
+      let parMade =0; 
+      let timesHitRightRough =0; 
+
+      filteredRounds.value.forEach(round =>{
+        const rightRoughHoles= round.holes.filter(hole => hole.fairway ==="Right");
+        timesHitRightRough += rightRoughHoles.length; 
+
+        parMade += rightRoughHoles.filter(hole => hole.strokes <= hole.par).length; 
+      })
+      return timesHitRightRough >0 ? ((parMade / timesHitRightRough)*100).toFixed(1):0;
     });
 
-    const averageParFromFairway = computed(() => {
+
+     const averageParFromFairway = computed(() => {
       if (filteredRounds.value.length === 0) return 0;
-      const total = filteredRounds.value.reduce((sum, round) => {
-        return sum + calculateAverageParFromFairway(round.holes);
-      }, 0);
-      return (total / filteredRounds.value.length).toFixed(1);
+
+      let parMade =0; 
+      let timesHitFairway =0; 
+
+      filteredRounds.value.forEach(round =>{
+        const fairwayHoles= round.holes.filter(hole => hole.fairway ==="Hit");
+        timesHitFairway += fairwayHoles.length; 
+
+        parMade += fairwayHoles.filter(hole => hole.strokes <= hole.par).length; 
+      })
+      return timesHitFairway >0 ? ((parMade / timesHitFairway)*100).toFixed(1):0;
     });
+
+   
+
 
  
 
@@ -1048,6 +1137,12 @@ function calculateUpAndDowns(holes) {
 }
 .orange-box {
   background-color: orange;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+.grey-box {
+  background-color: rgb(147, 146, 146);
   color: white;
   padding: 10px;
   border-radius: 5px;

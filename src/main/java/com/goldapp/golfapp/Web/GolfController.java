@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.goldapp.golfapp.Pojo.GolfRound;
+import com.goldapp.golfapp.Pojo.UserInfo;
 import com.goldapp.golfapp.Service.GolfRoundService;
 
 @CrossOrigin(origins = "http://localhost:5173", 
              allowedHeaders = "*",
              methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
-             allowCredentials = "true") // Add this
+             allowCredentials = "true")
 @RestController
 @RequestMapping("/round")
 public class GolfController {
@@ -55,6 +56,7 @@ public class GolfController {
     public GolfRound findRound(@RequestBody GolfRound round) {
         return golfRoundService.findRoundByDateAndCourseName(round.getDate(), round.getCourseName());
     }
+
 
     @GetMapping("/allRounds")
     public List<GolfRound> getAllGolfRounds() {

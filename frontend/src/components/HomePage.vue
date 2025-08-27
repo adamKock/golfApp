@@ -2,12 +2,13 @@
   <div>
     <!-- Full-width navigation bar -->
       <nav class="nav-bar">
-      <router-link to="/" class="nav-link">Home</router-link>
+      <router-link to="/" class="nav-link">Logout</router-link>
+     <router-link to="/home" class="nav-link">Home</router-link>
       <router-link to="/AddRound" class="nav-link">Add Round</router-link>
       <router-link to="/ViewRound" class="nav-link">View Round</router-link>
       <router-link to="/ViewStats" class="nav-link">View Stats</router-link>
-       <router-link to="/ViewInsights" class="nav-link">View Insights</router-link>
-    </nav>
+      <router-link to="/ViewInsights" class="nav-link">View Insights</router-link>
+     </nav>
 
     <!-- Page content in a centered container -->
     <div class="home-container">

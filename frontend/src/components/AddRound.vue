@@ -4,7 +4,8 @@
     
      <!-- Need to change the logic so when I select 9 or 18 I can only fill in 9 or 18 holes -->
     <nav class="nav-bar">
-     <router-link to="/" class="nav-link">Home</router-link>
+     <router-link to="/" class="nav-link">Logout</router-link>
+     <router-link to="/home" class="nav-link">Home</router-link>
       <router-link to="/AddRound" class="nav-link">Add Round</router-link>
       <router-link to="/ViewRound" class="nav-link">View Round</router-link>
       <router-link to="/ViewStats" class="nav-link">View Stats</router-link>

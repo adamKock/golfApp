@@ -10,6 +10,5 @@ import com.goldapp.golfapp.Pojo.GolfRound;
 @Repository
 public interface GolfRoundRepo extends JpaRepository<GolfRound, Long>{
      GolfRound findRoundByDateAndCourseName(LocalDate date, String courseName);
-  
     
 }
