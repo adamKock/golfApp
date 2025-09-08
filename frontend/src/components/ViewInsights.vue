@@ -677,15 +677,31 @@ const GIRAccuracyOverTimeData = computed(() => {
 
  
 
-    // Methods
+    
+       // Methods
     async function getRounds() {
+
+    // Get userId from localStorage here
+  const userId = localStorage.getItem('userId');
+  console.log('User ID:', userId); // Debug log
+
+      if(!userId){
+        console.error("No User ID found"); 
+        return; 
+      }
+
       try {
         loading.value = true;
-        const response = await fetch("http://localhost:8080/round/allRounds");
+         const response = await fetch(`http://localhost:8080/round/allRoundsById?userId=${userId}`);
         
-        if (!response.ok) {
-          throw new Error("Could not fetch rounds");
-        }
+       console.log('Response status:', response.status); // Add this
+    
+    if (!response.ok) {
+      // Get the error message from the response body
+      const errorText = await response.text();
+      console.error('Server error response:', errorText);
+      throw new Error(`Server error: ${response.status} - ${errorText}`);
+    }
         
         const data = await response.json();
         allRounds.value = data;

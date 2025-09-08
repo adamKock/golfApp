@@ -9,3 +9,10 @@ web layer (Controller)
 create interface of service layer
 
 Application properties file for local host etc 
+
+
+Notes 8/9
+Trying to implement ID's on rounds etc so when you login you pass your id and when you get the rounds you only get the rounds of your ID
+
+
+Now need to add validation to the userlogin add email, and validate the email and username hasn't been used before

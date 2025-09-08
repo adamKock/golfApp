@@ -50,4 +50,8 @@ public class AuthService {
     public boolean userExists(String userName) {
         return authRepository.findByUserName(userName) != null;
     }
+
+     public boolean emailExists(String email) {
+        return authRepository.findByEmail(email) != null;
+    }
 }

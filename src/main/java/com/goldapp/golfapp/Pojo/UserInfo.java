@@ -14,6 +14,7 @@ public class UserInfo {
     private Long id;
     private String userName;
     private String passWord;
+    private String email; 
 
     public Long getId() {
         return id;
@@ -31,12 +32,20 @@ public class UserInfo {
         this.userName = userName;
     }
 
-    public String getPasWord() {
+    public String getPassWord() {
         return passWord;
     }
 
     public void setPassWord(String passWord) {
         this.passWord = passWord;
+    }
+
+     public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 }

@@ -210,6 +210,7 @@ export default {
       date: '',
       weatherConditions:'',
       holesToPlay: null,
+      userId: '',
       roundData: [],
       currentHole: {
         holeNumber: null,
@@ -238,11 +239,16 @@ export default {
         return;
     }
 
+     const userId = localStorage.getItem('userId');
+     console.log(userId);
+
+
     // Set isGIR explicitly before pushing
     this.currentHole.isGIR = this.isGIR;
 
     // Push current hole to roundData
     this.roundData.push({ ...this.currentHole });
+
 
     // Reset hole fields
     this.currentHole = {
@@ -263,7 +269,8 @@ export default {
             courseName: this.courseName,
             weatherConditions: this.weatherConditions,
             date: this.date,
-            holes: this.roundData
+            holes: this.roundData,
+            userId: userId
         };
 
         try {
@@ -334,6 +341,10 @@ export default {
 
 
 computed: {
+
+  userId(){
+    return localStorage.getItem('userId');
+  },
   progressPercentage() {
     const total = parseInt(this.holesToPlay) || 0;
     const current = this.currentHole.holeNumber || 1;

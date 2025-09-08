@@ -41,13 +41,22 @@ public class AuthController {
             response.put("message", "Invalid username or password");
             return ResponseEntity.status(401).body(response);
         }
+
+       
     }
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody UserInfo userInfo) {
         try {
+
+            if(authService.emailExists(userInfo.getEmail())){
+                 Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("message", "Email already exists");
+                return ResponseEntity.badRequest().body(response);
+            }
             // Check if username already exists
-            if (authService.userExists(userInfo.getUserName())) {
+            else if(authService.userExists(userInfo.getUserName())) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("success", false);
                 response.put("message", "Username already exists");

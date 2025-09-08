@@ -153,9 +153,14 @@ export default {
         return;
       }
 
+       // Get userId from localStorage here
+  const userId = localStorage.getItem('userId');
+  console.log('User ID:', userId); // Debug log
+
       const data = {
         courseName: courseName.value.trim(),
         date: date.value,
+        userId: userId,
       };
 
       try {
@@ -164,6 +169,14 @@ export default {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         });
+
+        if(response.status===404){
+          const errorData = await response.json();
+      alert(errorData.message || 'No round found for the specified criteria');
+      roundData.value = null;
+      return;
+
+        }
 
         if (!response.ok) {
           throw new Error('Network response was not OK');
@@ -184,6 +197,10 @@ export default {
     const totalStrokes = computed(() => {
       return roundData.value ? roundData.value.holes.reduce((sum, h) => sum + h.strokes, 0) : 0;
     });
+
+  
+
+ 
 
     const weatherConditions = computed(() => {
   return roundData.value ? roundData.value.weatherConditions : '';

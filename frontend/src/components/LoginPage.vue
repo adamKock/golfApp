@@ -20,6 +20,11 @@
             Register
           </button>
         </div>
+        <!-- Additional Register Fields (only show when registering) -->
+         <div v-if="isRegistering" class="form-group">
+          <label>Email</label>
+          <input type="email" v-model="email" required placeholder="Please enter your email"/>
+        </div>
 
         <!-- Username Field (always visible) -->
         <div class="form-group">
@@ -38,6 +43,7 @@
           <label>Confirm Password</label>
           <input type="password" v-model="confirmPassword" required placeholder="Confirm your password"/>
         </div>
+        
 
        
 
@@ -64,6 +70,7 @@ export default {
     return {
       userName: '',
       passWord: '',
+      email:'',
       confirmPassword: '',
       isRegistering: false,
       loading: false,
@@ -77,6 +84,7 @@ export default {
       if (this.isRegistering) {
         // Register form validation
         return this.userName.trim() && 
+               this.email.trim() &&
                this.passWord.trim() && 
                this.confirmPassword.trim() && 
                this.passWord === this.confirmPassword;
@@ -141,6 +149,11 @@ export default {
       const data = await response.json();
       console.log('Login successful', data);
       this.$router.push('/home');
+    const userId = data.user.id;
+    console.log('User ID:', userId);
+
+    // Store for later use
+    localStorage.setItem('userId', userId);
     },
 
     async register() {
@@ -152,6 +165,7 @@ export default {
       const registerData = {
         userName: this.userName,
         passWord: this.passWord,
+        email: this.email
        
       }; 
       
@@ -170,7 +184,10 @@ export default {
 
       const data = await response.json();
       console.log('Registration successful', data);
-      this.successMessage = 'Registration successful! You can now login.';
+      window.alert('Registration successful!');
+      this.$router.push('/home');
+      
+
       
       // Switch back to login form after successful registration
       setTimeout(() => {

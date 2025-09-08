@@ -12,20 +12,29 @@ public class Hole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; 
+    private Long id;
     private int holeNumber;
     private String par;
     private int strokes;
     private String fairway;
     private int putts;
-    private int penalties; 
+    private int penalties;
     private String teeClubUsed;
     private Boolean isGIR;
     private String upAndDown;
+    private Long userId; 
 
     // getters and setters
 
-       public Long getId() {
+      public Long getUserId(){
+        return userId; 
+    }
+
+    public void setUserId(Long userId){
+        this.userId=userId; 
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -33,40 +42,43 @@ public class Hole {
         this.id = id;
     }
 
-    public String getTeeClubUsed(){
+    public String getTeeClubUsed() {
         return teeClubUsed;
     }
 
-    public void setTeeClubUsed(String teeClubUsed){
+    public void setTeeClubUsed(String teeClubUsed) {
         this.teeClubUsed = teeClubUsed;
 
     }
 
-    public Boolean getGIR(){
+    public Boolean getGIR() {
         return isGIR;
     }
+
     public void setIsGIR(Boolean isGIR) {
         this.isGIR = isGIR;
     }
 
-    public String getUpAndDown(){
-        return upAndDown; 
-    }
-    public void setUpAndDown(String upAndDown){
-        this.upAndDown = upAndDown; 
+    public String getUpAndDown() {
+        return upAndDown;
     }
 
-    public int getPenalties(){
+    public void setUpAndDown(String upAndDown) {
+        this.upAndDown = upAndDown;
+    }
+
+    public int getPenalties() {
         return penalties;
     }
 
-    public void setPenalties(int penalties){
+    public void setPenalties(int penalties) {
         this.penalties = penalties;
     }
 
     public int getHoleNumber() {
         return holeNumber;
     }
+
     public void setHoleNumber(int holeNumber) {
         this.holeNumber = holeNumber;
     }
@@ -74,6 +86,7 @@ public class Hole {
     public String getPar() {
         return par;
     }
+
     public void setPar(String par) {
         this.par = par;
     }
@@ -81,6 +94,7 @@ public class Hole {
     public int getStrokes() {
         return strokes;
     }
+
     public void setStrokes(int strokes) {
         this.strokes = strokes;
     }
@@ -88,6 +102,7 @@ public class Hole {
     public String getFairway() {
         return fairway;
     }
+
     public void setFairway(String fairway) {
         this.fairway = fairway;
     }
@@ -95,6 +110,7 @@ public class Hole {
     public int getPutts() {
         return putts;
     }
+
     public void setPutts(int putts) {
         this.putts = putts;
     }

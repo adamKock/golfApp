@@ -11,9 +11,8 @@ import com.goldapp.golfapp.Repo.GolfRoundRepo;
 
 @Service
 public class GolfRoundServiceImpl implements GolfRoundService {
-    @Autowired 
+    @Autowired
     private GolfRoundRepo repo;
-
 
     @Override
     public void addRound(GolfRound golfRound) {
@@ -26,12 +25,14 @@ public class GolfRoundServiceImpl implements GolfRoundService {
     }
 
     @Override
-    public GolfRound findRoundByDateAndCourseName(LocalDate date, String courseName){
-        return repo.findRoundByDateAndCourseName(date, courseName);
+    public GolfRound findRoundByDateAndCourseNameAndUserId(LocalDate date, String courseName, Long userId) {
+        return repo.findRoundByDateAndCourseNameAndUserId(date, courseName, userId);
     }
 
-  
+    @Override
+    public List<GolfRound> findAllRoundsByUserId(Long userId) {
+        return repo.findAllRoundsByUserId(userId);
 
-    
-    
+    }
+
 }

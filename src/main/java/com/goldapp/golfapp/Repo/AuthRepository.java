@@ -8,11 +8,14 @@ import com.goldapp.golfapp.Pojo.UserInfo;
 
 @Repository
 public interface AuthRepository extends JpaRepository<UserInfo, Long> {
-    
-    UserInfo findByUserNameAndPassWord(String userName, String password); 
+
+    UserInfo findByUserNameAndPassWord(String userName, String password);
+
     UserInfo findByUserName(String userName);
+
     @Query("SELECT COALESCE(MAX(u.id), 0) FROM UserInfo u")
     Long findMaxId();
 
- 
+    UserInfo findByEmail(String email);
+
 }
