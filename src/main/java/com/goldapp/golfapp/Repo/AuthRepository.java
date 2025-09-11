@@ -11,11 +11,11 @@ public interface AuthRepository extends JpaRepository<UserInfo, Long> {
 
     UserInfo findByUserNameAndPassWord(String userName, String password);
 
-    UserInfo findByUserName(String userName);
+    UserInfo findByUserNameIgnoreCase(String userName);
 
     @Query("SELECT COALESCE(MAX(u.id), 0) FROM UserInfo u")
     Long findMaxId();
 
-    UserInfo findByEmail(String email);
+    UserInfo findByEmailIgnoreCase(String email);
 
 }

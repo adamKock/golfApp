@@ -17,7 +17,7 @@ public class AuthService {
     }
 
     public UserInfo findByUserName(String userName) {
-        return authRepository.findByUserName(userName);
+        return authRepository.findByUserNameIgnoreCase(userName);
     }
 
     public UserInfo registerUser(UserInfo userInfo) {
@@ -48,10 +48,10 @@ public class AuthService {
 
 
     public boolean userExists(String userName) {
-        return authRepository.findByUserName(userName) != null;
+        return authRepository.findByUserNameIgnoreCase(userName) != null;
     }
 
      public boolean emailExists(String email) {
-        return authRepository.findByEmail(email) != null;
+        return authRepository.findByEmailIgnoreCase(email) != null;
     }
 }

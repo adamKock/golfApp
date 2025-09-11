@@ -44,7 +44,7 @@
           <input type="password" v-model="confirmPassword" required placeholder="Confirm your password"/>
         </div>
         
-
+      <!-- Want to add some validation maybe some functions that checks whats inputted to see it has required length, and chars  -->  
        
 
         <!-- Submit Button -->
@@ -80,19 +80,21 @@ export default {
   },
 
   computed: {
-    isFormValid() {
-      if (this.isRegistering) {
-        // Register form validation
-        return this.userName.trim() && 
-               this.email.trim() &&
-               this.passWord.trim() && 
-               this.confirmPassword.trim() && 
-               this.passWord === this.confirmPassword;
-      } else {
-        // Login form validation
-        return this.userName.trim() && this.passWord.trim();
-      }
-    },
+     isFormValid() {
+    if (this.isRegistering) {
+      return (
+        this.validateEmail(false) &&
+        this.validateUsername(false) &&
+        this.validatePassword(false) &&
+        this.validateConfirmPassword(false)
+      );
+    } else {
+      return (
+        this.validateUsername(false) &&
+        this.validatePassword(false)
+      );
+    }
+  },
   },
   
   watch: {
@@ -106,6 +108,70 @@ export default {
   },
   
   methods: {
+    //implement functions that validate each field 
+    validateEmail(setError = true){
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!this.email.trim()){
+         if(setError) this.errorMessage = "Enter an email address";
+        return false;
+      }
+      if(this.email.length<4){
+         if(setError) this.errorMessage = "Enter an email address over 4 chars";
+        return false;
+      }
+      if(!emailRegex.test(this.email)){
+        if(setError) this.errorMessage = "Enter an valid email address"
+        return false;
+      }
+      return true;
+
+    },
+
+    validateUsername(setError = true){
+      if(this.userName.length<4){
+         if(setError) this.errorMessage = "Enter a username greater than four characters"; 
+        return false; 
+      }
+      if(!this.userName.trim()){
+         if(setError) this.errorMessage = "Enter text in the username input";
+        return false;
+      }
+      return true;
+
+    },
+
+    validatePassword(setError = true){
+      if(!this.passWord){
+        if(setError) this.errorMessage = "Enter a password"; 
+        return false; 
+      }
+      if(this.passWord.length<6){
+         if(setError) this.errorMessage = "Password must be longer than 6 characters"; 
+        return false;
+      }
+      if(!/[A-Z]/.test(this.passWord)){
+         if(setError) this.errorMessage = "Please enter an uppercase or lowercase"; 
+        return false; 
+      }
+      if(!/[0-9]/.test(this.passWord)){
+         if(setError) this.errorMessage ="Please a number between 0-9";
+        return false; 
+      }
+      this.errorMessage =" "; 
+      return true;
+
+    },
+    validateConfirmPassword(setError = true){
+      if(this.passWord!==this.confirmPassword){
+         if(setError) this.errorMessage="Passwords need to match";
+        return false;
+      }else{
+        return true; 
+      }
+
+
+    },
+
     async submit() {
       if (this.loading) return;
       
@@ -149,8 +215,8 @@ export default {
       const data = await response.json();
       console.log('Login successful', data);
       this.$router.push('/home');
-    const userId = data.user.id;
-    console.log('User ID:', userId);
+      const userId = data.user.id;
+      console.log('User ID:', userId);
 
     // Store for later use
     localStorage.setItem('userId', userId);
